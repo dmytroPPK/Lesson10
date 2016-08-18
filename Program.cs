@@ -10,18 +10,6 @@ namespace Lesson10
     public delegate void MyDelegate(double first,double second);
     class Program
     {
-        public double firstNumber;
-        public double secondNumber;
-        public string resultMenu;
-        public static string textMenu = "\tChose a few operations\n  1: +\n  2: -\n  3: /\n  4: *";
-        protected MyDelegate myDelegate;
-        public event MyDelegate eventCalculate
-        {
-            add { myDelegate += value; }
-            remove { myDelegate -= value; }
-        }
-
-
         static void Main(string[] args)
         {
             Program program = new Program();
@@ -34,38 +22,61 @@ namespace Lesson10
             ReadKey();
         }
 
+        // -------------------------------
+        public double firstNumber;
+        public double secondNumber;
+        public string resultMenu;
+        public static string textMenu = "\tChose a few operations\n  1: +\n  2: -\n  3: /\n  4: *";
+        protected MyDelegate myDelegate;
+        public event MyDelegate EventCalculate
+        {
+            add { myDelegate += value; }
+            remove { myDelegate -= value; }
+        }
+
+        public Program()
+        {
+            ForegroundColor = ConsoleColor.White;
+        }
+
+
+        protected void Add(double a, double b)
+        {
+            WriteLine("{0} + {1} = {2}", a, b, a + b);
+
+        }
+        protected void Sub(double a, double b)
+        {
+            WriteLine("{0} - {1} = {2}", a, b, a - b);
+
+        }
+        protected void Div(double a, double b)
+        {
+            WriteLine("{0} / {1} = {2}", a, b, a / b);
+
+        }
+        protected void Multi(double a, double b)
+        {
+            WriteLine("{0} * {1} = {2}", a, b, a * b);
+
+        }
         public void MakeIvent()
         {
             if (this.resultMenu.Contains('1'))
             {
-                eventCalculate += delegate (double a, double b) 
-                {
-                    WriteLine("{0} + {1} = {2}",a,b,a+b);
-                    
-                };
+                EventCalculate += this.Add;
             }
             if (this.resultMenu.Contains('2'))
             {
-                eventCalculate += delegate (double a, double b)
-                {
-                    WriteLine("{0} - {1} = {2}", a, b, a - b);
-
-                };
+                EventCalculate += this.Sub;
             }
             if (this.resultMenu.Contains('3'))
             {
-                eventCalculate += delegate (double a, double b) 
-                {
-                    WriteLine("{0} / {1} = {2}", a, b, a / b);
-
-                };
+                EventCalculate += this.Div;
             }
             if (this.resultMenu.Contains('4'))
             {
-                eventCalculate += delegate (double a, double b) 
-                {
-                    WriteLine("{0} * {1} = {2}", a, b, a * b);
-                };
+                EventCalculate += this.Multi;
             }
 
         }
@@ -115,7 +126,7 @@ namespace Lesson10
             {
                 Write(msg);
                 string strDouble = ReadLine();
-                if(!this.ParseToDouble(strDouble,ref num))
+                if(!Double.TryParse(strDouble,out num))
                 {
                     
                     WriteLine("\t<< it was not a number!");
@@ -126,13 +137,6 @@ namespace Lesson10
             }
         }
 
-        private bool ParseToDouble(string strDouble, ref double number)
-        {
-            return Double.TryParse(strDouble,out number);
-        }
-        public Program()
-        {
-            ForegroundColor = ConsoleColor.White;
-        }
+        
     }
 }
